@@ -57,36 +57,36 @@ ansiBgClrWhite = "47"
 
 -- Colors
 colorBlack = {
-	foreground = ansiFgClrBlack,
-	background = ansiBgClrBlack
+    foreground = ansiFgClrBlack,
+    background = ansiBgClrBlack
 }
 colorRed = {
-	foreground = ansiFgClrRed,
-	background = ansiBgClrRed
+    foreground = ansiFgClrRed,
+    background = ansiBgClrRed
 }
 colorGreen = {
-	foreground = ansiFgClrGreen,
-	background = ansiBgClrGreen
+    foreground = ansiFgClrGreen,
+    background = ansiBgClrGreen
 }
 colorYellow = {
-	foreground = ansiFgClrYellow,
-	background = ansiBgClrYellow
+    foreground = ansiFgClrYellow,
+    background = ansiBgClrYellow
 }
 colorBlue = {
-	foreground = ansiFgClrBlue,
-	background = ansiBgClrBlue
+    foreground = ansiFgClrBlue,
+    background = ansiBgClrBlue
 }
 colorMagenta = {
-	foreground = ansiFgClrMagenta,
-	background = ansiBgClrMagenta
+    foreground = ansiFgClrMagenta,
+    background = ansiBgClrMagenta
 }
 colorCyan = {
-	foreground = ansiFgClrCyan,
-	background = ansiBgClrCyan
+    foreground = ansiFgClrCyan,
+    background = ansiBgClrCyan
 }
 colorWhite = {
-	foreground = ansiFgClrWhite,
-	background = ansiBgClrWhite
+    foreground = ansiFgClrWhite,
+    background = ansiBgClrWhite
 }
 
 -- Variables to maintain prompt state
@@ -102,23 +102,23 @@ newLineSymbol = "\n"
 -- Some symbols are required. If the user fails to provide them in the config file, they're created here
 -- Prompt displayed instead of user's home folder e.g. C:\Users\username
 if not plc_prompt_homeSymbol then 
-	plc_prompt_homeSymbol = "~"
+    plc_prompt_homeSymbol = "~"
 end 
 -- Symbol connecting each segment of the prompt. Be careful before you change this.
 if not plc_prompt_arrowSymbol then
-	plc_prompt_arrowSymbol = ""
+    plc_prompt_arrowSymbol = ""
 end
 -- Symbol displayed in the new line below the prompt.
 if not plc_prompt_lambSymbol then
-	plc_prompt_lambSymbol = "λ"
+    plc_prompt_lambSymbol = "λ"
 end
 -- Version control (e.g. Git) branch symbol. Used to indicate the name of a branch.
 if not plc_git_branchSymbol then
-	plc_git_branchSymbol = ""
+    plc_git_branchSymbol = ""
 end 
 -- Version control (e.g. Git) conflict symbol. Used to indicate there's a conflict.
 if not plc_git_conflictSymbol then
-	plc_git_conflictSymbol = "!"
+    plc_git_conflictSymbol = "!"
 end
 
 ---
@@ -129,11 +129,11 @@ end
 -- @return {string} text with an arrow symbol added to it
 ---
 function addArrow(text, oldColor, newColor)
-	-- Old color is the color of the previous segment
-	-- New color is the color of the next segment
-	-- An arrow is a character written using the old color on a background of the new color
-	text = addTextWithColor(text, plc_prompt_arrowSymbol, oldColor.foreground, newColor.background)
-	return text
+    -- Old color is the color of the previous segment
+    -- New color is the color of the next segment
+    -- An arrow is a character written using the old color on a background of the new color
+    text = addTextWithColor(text, plc_prompt_arrowSymbol, oldColor.foreground, newColor.background)
+    return text
 end 
 
 ---
@@ -145,15 +145,15 @@ end
 -- @return {string} concatination of the the two input text with the correct color formatting.
 ---
 function addTextWithColor(text, textToAdd, textColorValue, fillColorValue)
-	-- let's say the 
-	-- fillColorValue is 41
-	-- textColorValue is 30
-	-- textToAdd is "Hello"
-	-- This adds to text \x1b[30;40mHello\x1b[0m
-	-- which add Hello with red background and black letters
-	-- [0m at the end turns off all attributes
-	text = text..ansiEscChar.."["..textColorValue..";"..fillColorValue.."m"..textToAdd..ansiEscChar.."[0m"
-	return text 
+    -- let's say the 
+    -- fillColorValue is 41
+    -- textColorValue is 30
+    -- textToAdd is "Hello"
+    -- This adds to text \x1b[30;40mHello\x1b[0m
+    -- which add Hello with red background and black letters
+    -- [0m at the end turns off all attributes
+    text = text..ansiEscChar.."["..textColorValue..";"..fillColorValue.."m"..textToAdd..ansiEscChar.."[0m"
+    return text 
 end 
 
 ---
@@ -164,46 +164,46 @@ end
 -- @return {nil} The prompt is reset with the new segments
 ---
 function addSegment(text, textColor, fillColor) 	
-	local newPrompt = ""
-	-- If there's an existing segment
-	if currentSegments == "" then 
-		newPrompt = ""
-	else 
-		-- Remove the existing arrow 
-		-- The last arrow with all its surrounding escape characters and graphics mode settings count as 7 characters
-		newPrompt = string.sub(currentSegments, 0, string.len(currentSegments) - 7)
-		-- Add arrow with color of new segment
-		newPrompt = addArrow(newPrompt, currentFillColor, fillColor)
-	end 
-	-- Write the text with the fill color
-	newPrompt = addTextWithColor(newPrompt, text, textColor.foreground, fillColor.background)
-	-- Write the closing arrow
-	newPrompt = addArrow(newPrompt, fillColor, colorBlack)
+    local newPrompt = ""
+    -- If there's an existing segment
+    if currentSegments == "" then 
+        newPrompt = ""
+    else 
+        -- Remove the existing arrow 
+        -- The last arrow with all its surrounding escape characters and graphics mode settings count as 7 characters
+        newPrompt = string.sub(currentSegments, 0, string.len(currentSegments) - 7)
+        -- Add arrow with color of new segment
+        newPrompt = addArrow(newPrompt, currentFillColor, fillColor)
+    end 
+    -- Write the text with the fill color
+    newPrompt = addTextWithColor(newPrompt, text, textColor.foreground, fillColor.background)
+    -- Write the closing arrow
+    newPrompt = addArrow(newPrompt, fillColor, colorBlack)
 
-	-- Update current values
-	currentSegments = newPrompt
-	currentFillColor = fillColor
-	currentTextColor = textColor
+    -- Update current values
+    currentSegments = newPrompt
+    currentFillColor = fillColor
+    currentTextColor = textColor
 
-	-- Update clink prompt
-	clink.prompt.value = newPrompt
+    -- Update clink prompt
+    clink.prompt.value = newPrompt
 end 
 
 ---
 -- Resets the prompt and all state variables
 ---
 function resetPrompt()
-	clink.prompt.value = ""
-	currentSegments = ""
-	currentFillColor = colorBlue 
-	currentTextColor = colorWhite 
+    clink.prompt.value = ""
+    currentSegments = ""
+    currentFillColor = colorBlue 
+    currentTextColor = colorWhite 
 end
 
 ---
 -- Closes the prompts with a new line and the lamb symbol
 ---
 function closePrompt() 
-	clink.prompt.value = clink.prompt.value..newLineSymbol..plc_prompt_lambSymbol.." "
+    clink.prompt.value = clink.prompt.value..newLineSymbol..plc_prompt_lambSymbol.." "
 end
 
 ---
@@ -214,42 +214,42 @@ end
 ---
 function get_git_dir(path)
 
-	-- return parent path for specified entry (either file or directory)
-	local function pathname(path)
-			local prefix = ""
-			local i = path:find("[\\/:][^\\/:]*$")
-			if i then
-					prefix = path:sub(1, i-1)
-			end
-			return prefix
-	end
+    -- return parent path for specified entry (either file or directory)
+    local function pathname(path)
+        local prefix = ""
+        local i = path:find("[\\/:][^\\/:]*$")
+        if i then
+            prefix = path:sub(1, i-1)
+        end
+        return prefix
+    end
 
-	-- Checks if provided directory contains git directory
-	local function has_git_dir(dir)
-			return clink.is_dir(dir..'/.git') and dir..'/.git'
-	end
+    -- Checks if provided directory contains git directory
+    local function has_git_dir(dir)
+        return clink.is_dir(dir..'/.git') and dir..'/.git'
+    end
 
-	local function has_git_file(dir)
-			local gitfile = io.open(dir..'/.git')
-			if not gitfile then return false end
+    local function has_git_file(dir)
+        local gitfile = io.open(dir..'/.git')
+        if not gitfile then return false end
 
-			local git_dir = gitfile:read():match('gitdir: (.*)')
-			gitfile:close()
+        local git_dir = gitfile:read():match('gitdir: (.*)')
+        gitfile:close()
 
-			return git_dir and dir..'/'..git_dir
-	end
+        return git_dir and dir..'/'..git_dir
+    end
 
-	-- Set default path to current directory
-	if not path or path == '.' then path = clink.get_cwd() end
+    -- Set default path to current directory
+    if not path or path == '.' then path = clink.get_cwd() end
 
-	-- Calculate parent path now otherwise we won't be
-	-- able to do that inside of logical operator
-	local parent_path = pathname(path)
+    -- Calculate parent path now otherwise we won't be
+    -- able to do that inside of logical operator
+    local parent_path = pathname(path)
 
-	return has_git_dir(path)
-			or has_git_file(path)
-			-- Otherwise go up one level and make a recursive call
-			or (parent_path ~= path and get_git_dir(parent_path) or nil)
+    return has_git_dir(path)
+        or has_git_file(path)
+        -- Otherwise go up one level and make a recursive call
+        or (parent_path ~= path and get_git_dir(parent_path) or nil)
 end
 
 -- Register filters for resetting the prompt and closing it before and after all addons

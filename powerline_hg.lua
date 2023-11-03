@@ -15,12 +15,12 @@ local segmentColors = {
 }
 
 --- copied from clink.lua
- -- Resolves closest directory location for specified directory.
- -- Navigates subsequently up one level and tries to find specified directory
- -- @param  {string} path    Path to directory will be checked. If not provided
- --                          current directory will be used
- -- @param  {string} dirname Directory name to search for
- -- @return {string} Path to specified directory or nil if such dir not found
+    -- Resolves closest directory location for specified directory.
+    -- Navigates subsequently up one level and tries to find specified directory
+    -- @param  {string} path    Path to directory will be checked. If not provided
+    --                          current directory will be used
+    -- @param  {string} dirname Directory name to search for
+    -- @return {string} Path to specified directory or nil if such dir not found
 local function get_dir_contains(path, dirname)
 
     -- return parent path for specified entry (either file or directory)
@@ -67,7 +67,7 @@ end
 
 -- copied from clink.lua
 -- clink.lua is saved under %CMDER_ROOT%\vendor
- function get_hg_dir(path)
+function get_hg_dir(path)
     return get_dir_contains(path, '.hg')
 end
 
@@ -93,9 +93,10 @@ local function init()
         local rc = { pipe:close() }
 
         if output ~= nil and
-           string.sub(output,1,7) ~= "abort: " and             -- not an HG working copy
-           string.sub(output,1,12) ~= "000000000000" and       -- empty wc (needs update)
-           (not string.find(output, "is not recognized")) then -- 'hg' not in path
+            string.sub(output,1,7) ~= "abort: " and             -- not an HG working copy
+            string.sub(output,1,12) ~= "000000000000" and       -- empty wc (needs update)
+            (not string.find(output, "is not recognized")) then -- 'hg' not in path
+
             local items = {}
             for i in string.gmatch(output, "%S+") do
                 table.insert(items, i)

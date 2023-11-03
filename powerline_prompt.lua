@@ -1,29 +1,29 @@
 -- Configurations
 --- plc_prompt_type is whether the displayed prompt is the full path or only the folder name
- -- Use:
- -- "full" for full path like C:\Windows\System32
+    -- Use:
+    -- "full" for full path like C:\Windows\System32
 local promptTypeFull = "full"
- -- "folder" for folder name only like System32
+    -- "folder" for folder name only like System32
 local promptTypeFolder = "folder"
- -- "smart" to switch in git repo to folder name instead of full path 
+    -- "smart" to switch in git repo to folder name instead of full path 
 local promptTypeSmart = "smart"
 
- -- default is promptTypeFull
- -- Set default value if no value is already set
+    -- default is promptTypeFull
+    -- Set default value if no value is already set
 if not plc_prompt_type then
     plc_prompt_type = promptTypeFull
 end 
 if not plc_prompt_useHomeSymbol then 
-	plc_prompt_useHomeSymbol = true 
+    plc_prompt_useHomeSymbol = true 
 end
 
 -- Extracts only the folder name from the input Path
 -- Ex: Input C:\Windows\System32 returns System32
 ---
 local function get_folder_name(path)
-	local reversePath = string.reverse(path)
-	local slashIndex = string.find(reversePath, "\\")
-	return string.sub(path, string.len(path) - slashIndex + 2)
+    local reversePath = string.reverse(path)
+    local slashIndex = string.find(reversePath, "\\")
+    return string.sub(path, string.len(path) - slashIndex + 2)
 end
 
 -- * Segment object with these properties:
@@ -47,7 +47,7 @@ local function init()
 
     -- show just current folder
     if plc_prompt_type == promptTypeFolder then
-		cwd =  get_folder_name(cwd)
+        cwd =  get_folder_name(cwd)
     else    
     -- show 'smart' folder name
     -- This will show the full folder path unless a Git repo is active in the folder
@@ -70,8 +70,8 @@ local function init()
             end
         end
     end
-	
-	segment.text = " "..cwd.." "
+
+    segment.text = " "..cwd.." "
 end 
 
 ---

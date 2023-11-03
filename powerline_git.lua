@@ -89,7 +89,7 @@ local segment = {
 -- Sets the properties of the Segment object, and prepares for a segment to be added
 ---
 local function init()
-    segment.isNeeded = get_git_dir()    
+    segment.isNeeded = get_git_dir()
     if segment.isNeeded then
         -- if we're inside of git repo then try to detect current branch
         local branch = get_git_branch(git_dir)
